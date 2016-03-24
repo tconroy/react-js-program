@@ -1,50 +1,51 @@
-// var React = require('react');
-// var ReactDOM = require('react-dom');
-
-// var HelloWorld = React.createClass({
-// 	render: function () {
-// 		return (
-// 			<div>Hello {this.props.name}!</div>
-// 		);
-// 	}
-// });
-
-// ReactDOM.render(
-// 	<HelloWorld name="Tom" />,
-// 	document.getElementById('app')
-// );
+var USER_DATA = {
+	name: 'Tom Conroy',
+	username: 'butts',
+	image: 'https://avatars3.githubusercontent.com/u/1609336?v=3&s=460'
+};
 
 var React = require('react');
 var ReactDOM = require('react-dom');
 
 var ProfilePic = React.createClass({
-	render: function() {
-		return (
-			<img src={'https://photo.fb.com/'+this.props.username} />
-		);
+	render: function () {
+		return (<img src={this.props.imageUrl} style={{height:100, width:100}} />)
 	}
 });
+
 var ProfileLink = React.createClass({
 	render: function () {
 		return (
-			<a href={'https://www.fb.com/'+this.props.username}>
-				{this.props.username}
-			</a>
+			<div>
+				<a href={'https://www.github.com/' + this.props.username}>
+					{this.props.username}
+				</a>
+			</div>
 		);
 	}
-})
+});
+
+var ProfileName = React.createClass({
+	render: function () {
+		return (
+			<div>{this.props.name}</div>
+		);
+	}
+});
+
 var Avatar = React.createClass({
 	render: function () {
 		return (
 			<div>
-				<ProfilePic username={this.props.username} />
-				<ProfileLink username={this.props.username} />
+				<ProfilePic imageUrl={this.props.user.image} />
+				<ProfileName name={this.props.user.name} />
+				<ProfileLink username={this.props.user.username} />
 			</div>
 		);
 	}
 })
 
 ReactDOM.render(
-	<Avatar username="tylermcginnis" />,
+	<Avatar user={USER_DATA} />,
 	document.getElementById('app')
 );
