@@ -33,7 +33,6 @@ var PromptContainer = React.createClass({
 				}
 			});
 		} else {
-			console.log(this.context);
 			// go to player 2
 			this.context.router.push('/playerTwo/'+this.state.username);
 		}
