@@ -7,21 +7,29 @@ const param = '?client_id='+id+'&client_secret='+sec;
  * fetch user info
  */
 function getUserInfo (username) {
-	return axios.get('https://api.github.com/users/' + username + param);
+	return axios.get('https://api.github.com/users/' +
+		username +
+		param
+	);
 }
 
 /**
  * fetch repos
  */
 function getRepos (username) {
-	return axios.get('https://api.github.com/users/' + username + '/repos' + param + '&per_page=100');
+	return axios.get('https://api.github.com/users/' +
+		username +
+		'/repos' +
+		param +
+		'&per_page=100'
+	);
 }
 
 /**
  * calculate all the stars that the user has
  */
 function getTotalStars (repos) {
-	return repos.data.reduce(function (prev, current) {
+	return repos.data.reduce((prev, current) => {
 		return prev + current.stargazers_count;
 	});
 }
@@ -32,7 +40,7 @@ function getTotalStars (repos) {
 function getPlayersData (player) {
 	return getRepos(player.login)
 		.then(getTotalStars)
-		.then(function (totalStars) {
+		.then((totalStars) => {
 			return {
 				followers: player.followers,
 				totalStars: totalStars
@@ -56,19 +64,10 @@ function calculateScores (players) {
  * @return Array player data
  */
 export function getPlayersInfo (players) {
-	return axios.all(
-		players.map(
-			function(username) {
-				return getUserInfo(username);
-			}
-		)
-	).then(function (info) {
-		return info.map(function (user) {
-			return user.data;
-		});
-	}).catch(function (err) {
-		console.warn('Error in getPlayersInfo:', err);
-	});
+	return axios.all(players.map((username) => { return getUserInfo(username) })
+	).then((info) => {
+		return info.map((user) => user.data)
+	}).catch((err) => { console.warn('Error in getPlayersInfo:', err) });
 }
 
 /**
@@ -81,7 +80,5 @@ export function battle (players) {
 	const playerTwoData = getPlayersData(players[1]);
 	return axios.all([playerOneData, playerTwoData])
 		.then(calculateScores)
-		.catch(function (err) {
-			conosle.warn('error in getPlayersInfo: ', err);
-		});
+		.catch((err) => { console.warn('error in getPlayersInfo: ', err) });
 }
