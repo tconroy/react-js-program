@@ -1,28 +1,20 @@
 import axios from 'axios';
 const id = 'YOUR_CLIENT_ID';
 const sec = 'YOUR_SECRET_ID';
-const param = '?client_id='+id+'&client_secret='+sec;
+const param = `?client_id=${id}&client_secret=${sec}`;
 
 /**
  * fetch user info
  */
-function getUserInfo (username) {
-	return axios.get('https://api.github.com/users/' +
-		username +
-		param
-	);
+function getUserInfo (username = 'tconroy') {
+	return axios.get(`https://api.github.com/users/${username+param}`);
 }
 
 /**
  * fetch repos
  */
-function getRepos (username) {
-	return axios.get('https://api.github.com/users/' +
-		username +
-		'/repos' +
-		param +
-		'&per_page=100'
-	);
+function getRepos (username = 'tconroy') {
+	return axios.get(`https://api.github.com/users/${username}/repos${param}&per_page=100`);
 }
 
 /**
@@ -43,7 +35,7 @@ function getPlayersData (player) {
 		.then((totalStars) => {
 			return {
 				followers: player.followers,
-				totalStars: totalStars
+				totalStars
 			}
 		});
 }
