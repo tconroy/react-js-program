@@ -1,10 +1,2 @@
-var styles = {
-	transparentBg: {
-		background: 'transparent'
-	},
-	space: {
-		marginTop: '25px',
-	}
-};
-
-module.exports = styles;
+export const transparentBg = { background: 'transparent' };
+export const sapce = { marginTop: '25px' };
