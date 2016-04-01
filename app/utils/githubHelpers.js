@@ -29,15 +29,17 @@ function getTotalStars (repos) {
 /**
  * retrieve the player data.
  */
-function getPlayersData (player) {
-	return getRepos(player.login)
-		.then(getTotalStars)
-		.then((totalStars) => {
-			return {
-				followers: player.followers,
-				totalStars
-			}
-		});
+async function getPlayersData (player) {
+	try {
+		const repos = await getRepos(player.login);
+		const totalStars = await getTotalStars(repos);
+		return {
+			followers: player.followers,
+			totalStars
+		}
+	} catch (err) {
+		console.warn('Error in githubHelpers: ', err);
+	}
 }
 
 /**
@@ -55,11 +57,13 @@ function calculateScores (players) {
  * @param  Array players
  * @return Array player data
  */
-export function getPlayersInfo (players) {
-	return axios.all(players.map((username) => { return getUserInfo(username) })
-	).then((info) => {
-		return info.map((user) => user.data)
-	}).catch((err) => { console.warn('Error in getPlayersInfo:', err) });
+export async function getPlayersInfo (players) {
+	try {
+		const info = await Promise.all(players.map((username) => getUserInfo(username)));
+		return info.map((user) => user.data);
+	} catch (err) {
+		console.warn('Error in githubHelpers: ', err);
+	}
 }
 
 /**
@@ -67,10 +71,13 @@ export function getPlayersInfo (players) {
  * @param  {[type]} players [description]
  * @return {[type]}         [description]
  */
-export function battle (players) {
-	const playerOneData = getPlayersData(players[0]);
-	const playerTwoData = getPlayersData(players[1]);
-	return axios.all([playerOneData, playerTwoData])
-		.then(calculateScores)
-		.catch((err) => { console.warn('error in getPlayersInfo: ', err) });
+export async function battle (players) {
+	try {
+		const playerOneData = getPlayersData(players[0]);
+		const playerTwoData = getPlayersData(players[1]);
+		const data = await Promise.all([playerOneData, playerTwoData]);
+		return await calculateScores(data);
+	} catch (err) {
+		console.warn('Error in githubHelpers: ', err);
+	}
 }
