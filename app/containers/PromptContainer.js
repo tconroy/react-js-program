@@ -1,21 +1,20 @@
-import React from 'react';
+import React, { Component } from 'react';
 import Prompt from '../components/Prompt'
 
-const PromptContainer = React.createClass({
-	// pass items to components without going through props.
-	contextTypes: {
-		router: React.PropTypes.object.isRequired,
-	},
-	getInitialState () {
-		return {
-			username: '',
+class PromptContainer extends Component {
+
+	constructor () {
+		super();
+		this.state = {
+			username: ''
 		};
-	},
+	}
 	handleUpdateUser (e) {
 		this.setState({
 			username: e.target.value,
 		})
-	},
+
+	}
 	handleSubmitUser (e) {
 		e.preventDefault();
 		const { username } = this.state;
@@ -38,17 +37,22 @@ const PromptContainer = React.createClass({
 			// go to player 2
 			this.context.router.push(`/playerTwo/${username}`);
 		}
-	},
+	}
 	render () {
 		return (
 			<Prompt
-				onSubmitUser={this.handleSubmitUser}
-				onUpdateUser={this.handleUpdateUser}
+				onSubmitUser={(event) => this.handleSubmitUser(event)}
+				onUpdateUser={(event) => this.handleUpdateUser(event)}
 				header={this.props.route.header}
 				username={this.state.username}
 			 />
 		);
 	}
-});
+}
+
+// pass items to components without going through props.
+PromptContainer.contextTypes = {
+	router: React.PropTypes.object.isRequired,
+};
 
 export default PromptContainer;
